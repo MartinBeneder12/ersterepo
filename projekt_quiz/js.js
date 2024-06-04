@@ -106,18 +106,6 @@ let score = 0;
 document.addEventListener("DOMContentLoaded", () => {
     displayQuestion();
 
-    document.getElementById('next').addEventListener('click', () => {
-        currentQuestionIndex++;
-        updateButtons();
-        displayQuestion();
-    });
-
-    document.getElementById('prev').addEventListener('click', () => {
-        currentQuestionIndex--;
-        updateButtons();
-        displayQuestion();
-    });
-
     document.getElementById('submit').addEventListener('click', () => {
         checkAnswer();
         updateButtons();
@@ -151,18 +139,23 @@ function checkAnswer() {
     const selectedOption = document.querySelector('input[name="answer"]:checked');
     if (selectedOption && selectedOption.value === fragen[currentQuestionIndex].antwort) {
         score++;
-    }
+        document.getElementById('points').innerText = `Score: ${score} / ${fragen.length}`;
 
-    document.getElementById('points').innerText = `Score: ${score} / ${fragen.length}`;
+        if (currentQuestionIndex < fragen.length - 1) {
+            currentQuestionIndex++;
+            displayQuestion();
+        } else {
+            alert('Quiz finished! Your score: ' + score);
+            document.getElementById('next').disabled = true;
+            document.getElementById('submit').disabled = true;
+        }
 
-    if (currentQuestionIndex < fragen.length - 1) {
-        currentQuestionIndex++;
-        displayQuestion();
     } else {
-        alert('Quiz finished! Your score: ' + score);
-        document.getElementById('next').disabled = true;
-        document.getElementById('submit').disabled = true;
+        alert('Falsche Antwort!');
     }
+
+
+
 }
 
 function updateButtons() {
